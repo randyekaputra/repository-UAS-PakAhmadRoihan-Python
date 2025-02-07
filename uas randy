@@ -1,0 +1,99 @@
+# Fungsi untuk menambahkan tugas
+def add_task(tasks, task):
+    tasks.append(task)
+    print(f"Tugas '{task}' berhasil ditambahkan!")
+
+# Fungsi untuk menampilkan semua tugas
+def show_tasks(tasks):
+    if not tasks:
+        print("Tidak ada tugas.")
+    else:
+        print("Daftar Tugas:")
+        for i, task in enumerate(tasks, start=1):
+            print(f"{i}. {task}")
+
+# Fungsi untuk menghapus tugas
+def delete_task(tasks, index):
+    if 1 <= index <= len(tasks):
+        removed_task = tasks.pop(index - 1)
+        print(f"Tugas '{removed_task}' berhasil dihapus!")
+    else:
+        print("Indeks tidak valid.")
+
+# Fungsi untuk mencari tugas
+def search_task(tasks, keyword):
+    found_tasks = [task for task in tasks if keyword.lower() in task.lower()]
+    if found_tasks:
+        print(f"Tugas yang mengandung '{keyword}':")
+        for i, task in enumerate(found_tasks, start=1):
+            print(f"{i}. {task}")
+    else:
+        print(f"Tidak ada tugas yang mengandung '{keyword}'.")
+
+# Fungsi untuk menyimpan tugas ke file
+def save_tasks(tasks, filename):
+    with open(filename, 'w') as file:
+        for task in tasks:
+            file.write(task + "\n")
+    print(f"Daftar tugas berhasil disimpan ke {filename}.")
+
+# Fungsi untuk memuat tugas dari file
+def load_tasks(filename):
+    tasks = []
+    try:
+        with open(filename, 'r') as file:
+            tasks = [line.strip() for line in file.readlines()]
+        print(f"Daftar tugas berhasil dimuat dari {filename}.")
+    except FileNotFoundError:
+        print("File tidak ditemukan. Membuat daftar tugas baru.")
+    return tasks
+
+# Fungsi rekursif untuk menghitung jumlah tugas
+def count_tasks(tasks):
+    if not tasks:
+        return 0
+    else:
+        return 1 + count_tasks(tasks[1:])
+
+# Program Utama
+def main():
+    filename = "tasks.txt"
+    tasks = load_tasks(filename)
+
+    while True:
+        print("\nMenu:")
+        print("1. Tambah Tugas")
+        print("2. Tampilkan Tugas")
+        print("3. Hapus Tugas")
+        print("4. Cari Tugas")
+        print("5. Simpan Tugas")
+        print("6. Hitung Jumlah Tugas")
+        print("7. Keluar")
+
+        choice = input("Pilih menu (1-7): ")
+
+        if choice == '1':
+            task = input("Masukkan tugas baru: ")
+            add_task(tasks, task)
+        elif choice == '2':
+            show_tasks(tasks)
+        elif choice == '3':
+            index = int(input("Masukkan indeks tugas yang akan dihapus: "))
+            delete_task(tasks, index)
+        elif choice == '4':
+            keyword = input("Masukkan kata kunci pencarian: ")
+            search_task(tasks, keyword)
+        elif choice == '5':
+            save_tasks(tasks, filename)
+        elif choice == '6':
+            count = count_tasks(tasks)
+            print(f"Jumlah tugas: {count}")
+        elif choice == '7':
+            save_tasks(tasks, filename)
+            print("Terima kasih! Program selesai.")
+            break
+        else:
+            print("Pilihan tidak valid. Silakan coba lagi.")
+
+if _name_ == "_main_":
+    main()
